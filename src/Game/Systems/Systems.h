@@ -546,6 +546,7 @@ struct update_ui : xecs::system::instance
         GlutPrint(50, 50, "Score: %d", s_Game.score);
         GlutPrint(50, 25, "HighScore: %d", s_Game.m_Highscore);
         GlutPrint(s_Game.m_W/2 - 100, 50, "SPACE INVADERS");
+        GlutPrint((s_Game.m_W / 16 * 10.5f), 50, "Lives : ");
     }
 };
 
