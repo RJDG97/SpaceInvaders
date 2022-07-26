@@ -1,5 +1,4 @@
 #pragma once
-
 //---------------------------------------------------------------------------------------
 // COMPONENTS
 //---------------------------------------------------------------------------------------
@@ -26,13 +25,6 @@ struct timer
     float m_Timer;
 };
 
-struct bullet
-{
-    constexpr static auto typedef_v = xecs::component::type::data{};
-
-    xecs::component::entity m_ShipOwner;
-};
-
 struct grid_cell
 {
     constexpr static auto typedef_v = xecs::component::type::share
@@ -44,14 +36,12 @@ struct grid_cell
     std::int16_t m_Y;
 };
 
-using bullet_tuple = std::tuple<position, velocity, timer, bullet, grid_cell>;
-
 // ***********************************************
 
 struct sprite
 {
     constexpr static auto typedef_v = xecs::component::type::data{};
-
+    int size;
     size_t width, height;
     uint8_t* data;
 };
@@ -59,6 +49,7 @@ struct sprite
 struct animation
 {
     constexpr static auto typedef_v = xecs::component::type::data{};
+    bool animate;
     uint8_t* sprite1;
     uint8_t* sprite2;
     bool issprite1;
@@ -70,17 +61,31 @@ struct player
     constexpr static auto typedef_v = xecs::component::type::tag{};
 };
 
+struct manager
+{
+    constexpr static auto typedef_v = xecs::component::type::tag{};
+};
+
+struct shield
+{
+    constexpr static auto typedef_v = xecs::component::type::tag{};
+};
+
 struct enemy
 {
     constexpr static auto typedef_v = xecs::component::type::data{};
 
+    bool isdead;
     int score;
     xcore::vector2 m_InitPos;
 };
 
 struct projectile
 {
-    constexpr static auto typedef_v = xecs::component::type::tag{};
+    constexpr static auto typedef_v = xecs::component::type::data{};
+
+    xecs::component::entity m_ShipOwner;
+    bool m_isplayer;
 };
 
 using projectile_tuple = std::tuple<position, velocity, projectile, grid_cell>;

@@ -42,8 +42,10 @@ void InitializeGame( void ) noexcept
     s_Game.m_GameMgr->RegisterComponents
     <   sprite
     ,   animation
+    ,   manager
     ,   player
     ,   enemy
+    ,   shield
     ,   position
     ,   velocity
     ,   timer
@@ -61,17 +63,24 @@ void InitializeGame( void ) noexcept
     ,   update_input               // Structural: Yes, Create(Bullets)
     ,   update_movement            // Structural: No
     ,   update_enemy_logic         // Structural: Yes, Create(Bullets || Ships)
+    ,   update_projectile_movement // Structural: Yes, Destroy(Bullets || Ships)
     ,   update_projectile_logic    // Structural: Yes, Destroy(Bullets || Ships)
+    ,   update_manager             // Structural: Yes, Destroy/Create(Bullets || Ships)
     ,   animate_enemy              // Structural: No
     ,   renderer                   // Structural: No
     // ,       render_grid            // Structural: No
+    ,       update_ui              // Structural: No
+    ,       render_border          // Structural: No
     ,       render_player          // Structural: No
     ,       render_enemy           // Structural: No
+    ,       render_shield          // Structural: No
     ,       render_projectile      // Structural: No
     >();
 
+    Archetypes::InitArchetypes();
     Archetypes::GeneratePlayer();
     Archetypes::GenerateEnemy();
+    Archetypes::GenerateShields();
 }
 
 //---------------------------------------------------------------------------------------

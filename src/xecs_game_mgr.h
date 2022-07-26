@@ -117,6 +117,7 @@ namespace xecs::game_mgr
         bool                                Foreach                 ( std::span<xecs::archetype::instance* const>   List
                                                                     , T_FUNCTION&&                                  Function 
                                                                     ) noexcept;
+
         inline
         void                                Run                     ( void 
                                                                     ) noexcept;
