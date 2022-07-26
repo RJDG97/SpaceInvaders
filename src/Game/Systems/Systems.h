@@ -217,19 +217,17 @@ struct update_enemy_logic : xecs::system::instance
     };
 
     using query = std::tuple
-        <xecs::query::must<projectile>>;
+        <xecs::query::must<enemy>>;
 
     __inline
-        void operator()(entity& Entity, position& Position, velocity& Velocity, grid_cell& Cell) const noexcept
+        void operator()(entity& Entity, position& Position, velocity& Velocity, grid_cell& Cell, enemy& Enemy) const noexcept
     {
         // Update Movement
-        if (Position.m_Value.m_Y > 0 || Position.m_Value.m_Y < grid::max_resolution_height_v)
+        if (Enemy.m_InitPos.m_X + ((s_Game.m_W / 16) * 3) < Position.m_Value.m_X || Enemy.m_InitPos.m_X - ((s_Game.m_W / 16) * 3) > Position.m_Value.m_X)
         {
-            Position.m_Value += Velocity.m_Value;
-            Cell = grid::ComputeGridCellFromWorldPosition(Position.m_Value);
+            Velocity.m_Value.m_X = -Velocity.m_Value.m_X;
+            Position.m_Value.m_Y += s_Game.m_H / 48;
         }
-        else // Delete if off screen
-            DeleteEntity(Entity);
     }
 };
 
@@ -568,7 +566,7 @@ struct render_player : xecs::system::instance
             for (int x = 0; x < Sprite.width; ++x)
             {
                 if (Sprite.data[x + (Sprite.width * y)])
-                {
+                {   // Position + enemy size
                     glVertex2i((Position.m_Value.m_X - (Sprite.width * Size) / 2) + (x * Size) - Size / 2,
                         (Position.m_Value.m_Y - (Sprite.height * Size) / 2) + (y * Size) - Size / 2);
                     glVertex2i((Position.m_Value.m_X - (Sprite.width * Size) / 2) + (x * Size) - Size / 2,
@@ -634,7 +632,6 @@ struct render_enemy : xecs::system::instance
     }
 };
 
-
 struct render_projectile : xecs::system::instance
 {
     constexpr static auto typedef_v = xecs::system::type::child_update<renderer, renderer::update>
@@ -649,7 +646,7 @@ struct render_projectile : xecs::system::instance
 
     void OnPreUpdate(void) noexcept
     {
-        glBegin(GL_TRIANGLES);
+        glBegin(GL_QUADS);
     }
 
     void OnPostUpdate(void) noexcept
@@ -658,14 +655,19 @@ struct render_projectile : xecs::system::instance
     }
 
     __inline
-        void operator()(const position& Position, const velocity& Velocity) const noexcept
+        void operator()(const position& Position) const noexcept
     {
-        constexpr auto SizeX = 1;
-        constexpr auto SizeY = SizeX * 3;
+        constexpr auto Size = 3;
+
         glColor3f(1.0, 1.0, 1.0);
-        glVertex2i(Position.m_Value.m_X + Velocity.m_Value.m_X * SizeY, Position.m_Value.m_Y + Velocity.m_Value.m_Y * SizeY);
-        glVertex2i(Position.m_Value.m_X + Velocity.m_Value.m_Y * SizeX, Position.m_Value.m_Y - Velocity.m_Value.m_X * SizeX);
-        glVertex2i(Position.m_Value.m_X - Velocity.m_Value.m_Y * SizeX, Position.m_Value.m_Y + Velocity.m_Value.m_X * SizeX);
+
+        for (int y = 0; y < 3; ++y)
+        {
+            glVertex2i(Position.m_Value.m_X + (Size/2), Position.m_Value.m_Y - (Size/2) + (y * Size));
+            glVertex2i(Position.m_Value.m_X + (Size/2), Position.m_Value.m_Y + (Size/2) + (y * Size));
+            glVertex2i(Position.m_Value.m_X - (Size/2), Position.m_Value.m_Y + (Size/2) + (y * Size));
+            glVertex2i(Position.m_Value.m_X - (Size/2), Position.m_Value.m_Y - (Size/2) + (y * Size));
+        }
     }
 };
 

@@ -37,10 +37,11 @@ namespace Archetypes
             {
                 m_pEnemyArchetype->CreateEntity([&](position& Position, velocity& Velocity, timer& Timer, sprite& Sprite, grid_cell& Cell, animation& Animation, enemy& Enemy) noexcept
                     {
-                        Position.m_Value = xcore::vector2{ static_cast<float>(s_Game.m_W/ 15 * x + (s_Game.m_W/7))
+                        Position.m_Value = xcore::vector2{ static_cast<float>(s_Game.m_W/ 16 * x + (s_Game.m_W/5.4))
                         , static_cast<float>(s_Game.m_H/12  * y + 150) };
 
-
+                        Enemy.m_InitPos = Position.m_Value;
+                        Velocity.m_Value.m_X = 0.5f;
                         Cell = grid::ComputeGridCellFromWorldPosition(Position.m_Value);
                         if (y == 0)
                         {

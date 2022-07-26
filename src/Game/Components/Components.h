@@ -75,6 +75,7 @@ struct enemy
     constexpr static auto typedef_v = xecs::component::type::data{};
 
     int score;
+    xcore::vector2 m_InitPos;
 };
 
 struct projectile
