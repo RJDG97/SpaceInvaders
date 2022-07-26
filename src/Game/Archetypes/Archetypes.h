@@ -111,7 +111,16 @@ namespace Archetypes
                     Sprite.size = 5;
                     Sprite.width = Sprites::shieldspritedata.width;
                     Sprite.height = Sprites::shieldspritedata.height;
-                    Sprite.data = Sprites::shieldspritedata.sprite;
+                    Sprite.data = new uint8_t[13 * 7]
+                    {
+                        0,0,0,1,1,1,1,1,1,1,0,0,0,
+                        0,0,1,1,1,1,1,1,1,1,1,0,0,
+                        0,1,1,1,1,1,1,1,1,1,1,1,0,
+                        1,1,1,1,1,1,1,1,1,1,1,1,1,
+                        1,1,1,1,1,1,1,1,1,1,1,1,1,
+                        1,1,1,1,0,0,0,0,0,1,1,1,1,
+                        1,1,1,0,0,0,0,0,0,0,1,1,1
+                    };
                 });
         }
     }

@@ -52,6 +52,8 @@ struct update_input : xecs::system::instance
     }
 };
 
+//---------------------------------------------------------------------------------------
+
 struct update_movement : xecs::system::instance
 {
     constexpr static auto typedef_v = xecs::system::type::update
@@ -96,6 +98,8 @@ struct update_movement : xecs::system::instance
         GridCell = grid::ComputeGridCellFromWorldPosition(Position.m_Value);
     }
 };
+
+//---------------------------------------------------------------------------------------
 
 struct update_enemy_logic : xecs::system::instance
 {
@@ -145,6 +149,8 @@ struct update_enemy_logic : xecs::system::instance
     }
 };
 
+//---------------------------------------------------------------------------------------
+
 struct update_projectile_movement : xecs::system::instance
 {
     constexpr static auto typedef_v = xecs::system::type::update
@@ -177,6 +183,8 @@ struct update_projectile_movement : xecs::system::instance
             DeleteEntity(Entity);
     }
 };
+
+//---------------------------------------------------------------------------------------
 
 struct update_manager : xecs::system::instance
 {
@@ -320,12 +328,26 @@ struct update_projectile_logic : xecs::system::instance
                                 if (Entity == E) return false;
                                 if (Projectile.m_ShipOwner == E) return false;
 
-                                if (Pos.m_Value.m_X - (Sprite.width / 2 * Sprite.size) < Position.m_Value.m_X && Position.m_Value.m_X < Pos.m_Value.m_X + (Sprite.width / 2 * Sprite.size))
+                                for (int y = 0; y < Sprite.height; ++y)
                                 {
-                                    if (Pos.m_Value.m_Y - (Sprite.height / 2 * Sprite.size) < Position.m_Value.m_Y && Position.m_Value.m_Y < Pos.m_Value.m_Y + (Sprite.height / 2 * Sprite.size))
+                                    for (int x = 0; x < Sprite.width; ++x)
                                     {
-                                        DeleteEntity(Entity);
-                                        return true;
+                                        if (Sprite.data[x + (Sprite.width * y)])
+                                        {
+                                            if (Position.m_Value.m_X > (Pos.m_Value.m_X - (Sprite.width * Sprite.size) / 2) + (x * Sprite.size) - Sprite.size / 2
+                                                && Position.m_Value.m_X < (Pos.m_Value.m_X - (Sprite.width * Sprite.size) / 2) + (x * Sprite.size) + Sprite.size / 2)
+                                            {
+                                                if (Position.m_Value.m_Y < static_cast<float>((Pos.m_Value.m_Y - (Sprite.height * Sprite.size) / 2.0f) + (y * Sprite.size) + Sprite.size/2)
+                                                    && Position.m_Value.m_Y + 9 > static_cast<float>((Pos.m_Value.m_Y - (Sprite.height * Sprite.size) / 2.0f) + (y * Sprite.size) - Sprite.size/2))
+                                                {
+                                                    Sprite.data[x + (Sprite.width * y)] = 0;
+                                                    Sprite.data[x + (Sprite.width * (y+1))] = 0;
+                                                    DeleteEntity(Entity);
+                                                    return true;
+                                                }
+                                            }
+                                        }
+
                                     }
                                 }
                                 return false;
@@ -505,6 +527,8 @@ struct animate_enemy : xecs::system::instance
     }
 };
 
+//---------------------------------------------------------------------------------------
+
 struct update_ui : xecs::system::instance
 {
     constexpr static auto typedef_v = xecs::system::type::child_update<renderer, renderer::update>
@@ -524,6 +548,8 @@ struct update_ui : xecs::system::instance
         GlutPrint(s_Game.m_W/2 - 100, 50, "SPACE INVADERS");
     }
 };
+
+//---------------------------------------------------------------------------------------
 
 struct render_border : xecs::system::instance
 {
@@ -563,6 +589,8 @@ struct render_border : xecs::system::instance
         glVertex2i(0, s_Game.m_H / 12 * 11.5f - Size);
     }
 };
+
+//---------------------------------------------------------------------------------------
 
 struct render_player : xecs::system::instance
 {
@@ -636,6 +664,8 @@ struct render_player : xecs::system::instance
     }
 };
 
+//---------------------------------------------------------------------------------------
+
 struct render_enemy : xecs::system::instance
 {
     constexpr static auto typedef_v = xecs::system::type::child_update<renderer, renderer::update>
@@ -686,6 +716,8 @@ struct render_enemy : xecs::system::instance
     }
 };
 
+//---------------------------------------------------------------------------------------
+
 struct render_shield : xecs::system::instance
 {
     constexpr static auto typedef_v = xecs::system::type::child_update<renderer, renderer::update>
@@ -711,8 +743,6 @@ struct render_shield : xecs::system::instance
     __inline
         void operator()(const position& Position, const sprite& Sprite) const noexcept
     {
-        constexpr auto Size = 3;
-
         glColor3f(0.3, 1.0, 0.5);
 
         for (int y = 0; y < Sprite.height; ++y)
@@ -735,6 +765,8 @@ struct render_shield : xecs::system::instance
         }
     }
 };
+
+//---------------------------------------------------------------------------------------
 
 struct render_projectile : xecs::system::instance
 {
