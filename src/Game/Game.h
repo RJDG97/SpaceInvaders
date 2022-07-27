@@ -19,12 +19,13 @@ static struct game
     bool            m_MouseLeft{};
     bool            m_MouseRight{};
     keys_array      m_Keys{};
-    float           m_ProjectileSpeed = 10.0f;
+    float           m_ProjectileSpeed = 5.0f;
     float           m_PlayerMaxSpeed = 5.0f;
     int             m_Highscore = 0;
     int             score = 0;
     int             enemies = 0;
     int             lives = 3;
+    int             level = 1;
 
     xecs::archetype::instance* m_pProjectileArchetype{};
     xecs::archetype::instance* m_pEnemyArchetype{};

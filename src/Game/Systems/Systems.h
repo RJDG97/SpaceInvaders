@@ -213,8 +213,9 @@ struct update_manager : xecs::system::instance
     {
         if (s_Game.enemies == 0)
         {
-            if (s_Game.lives < 6)
+            if (s_Game.lives < 5)
                 s_Game.lives++;
+            s_Game.level++;
             Archetypes::GenerateEnemy();
         }
 
@@ -227,6 +228,7 @@ struct update_manager : xecs::system::instance
             s_Game.score = 0;
             s_Game.enemies = 0;
             s_Game.lives = 3;
+            s_Game.level = 1;
             // Delete Player
             Foreach(Search(m_QueryPlayer), [&](entity& Entity) noexcept
                 {
@@ -341,7 +343,6 @@ struct update_projectile_logic : xecs::system::instance
                                                     && Position.m_Value.m_Y + 9 > static_cast<float>((Pos.m_Value.m_Y - (Sprite.height * Sprite.size) / 2.0f) + (y * Sprite.size) - Sprite.size/2))
                                                 {
                                                     Sprite.data[x + (Sprite.width * y)] = 0;
-                                                    Sprite.data[x + (Sprite.width * (y+1))] = 0;
                                                     DeleteEntity(Entity);
                                                     return true;
                                                 }
@@ -543,10 +544,11 @@ struct update_ui : xecs::system::instance
     {
         int size = 5;
         glColor3f(1.0, 1.0, 1.0);
-        GlutPrint(50, 50, "Score: %d", s_Game.score);
-        GlutPrint(50, 25, "HighScore: %d", s_Game.m_Highscore);
+        GlutPrint(50, 50, "Score : %d", s_Game.score);
+        GlutPrint(50, 25, "HighScore : %d", s_Game.m_Highscore);
         GlutPrint(s_Game.m_W/2 - 100, 50, "SPACE INVADERS");
         GlutPrint((s_Game.m_W / 16 * 10.5f), 50, "Lives : ");
+        GlutPrint((s_Game.m_W / 16 * 10.5f), 25, "Level : %d", s_Game.level);
     }
 };
 

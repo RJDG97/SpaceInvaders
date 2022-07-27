@@ -22,7 +22,7 @@ namespace Archetypes
 
                 Timer.active = false;
                 Timer.m_Value = 0.0f;
-                Timer.m_Timer = 0.5f;
+                Timer.m_Timer = 0.25f;
 
                 Cell = grid::ComputeGridCellFromWorldPosition(Position.m_Value);
 
@@ -47,7 +47,7 @@ namespace Archetypes
 
                         Enemy.isdead = false;
                         Enemy.m_InitPos = Position.m_Value;
-                        Velocity.m_Value.m_X = 0.5f;
+                        Velocity.m_Value.m_X = 0.5f + (s_Game.level * 0.2f);
                         Cell = grid::ComputeGridCellFromWorldPosition(Position.m_Value);
                         Sprite.size = 3;
                         if (y == 0)
