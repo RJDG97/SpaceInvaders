@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_pool.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code pool declerations
+******************************************************************************/
+
 namespace xecs::pool
 {
     struct family;

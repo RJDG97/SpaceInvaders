@@ -1,5 +1,9 @@
-#pragma once
-
+/******************************************************************************
+filename: Sprites.h
+author: Renzo Garcia renzo.garcia@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains sprite structs for convenience
+******************************************************************************/
 namespace Sprites
 {
 	struct AlienSpriteA

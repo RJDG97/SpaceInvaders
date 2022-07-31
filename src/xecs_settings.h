@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_settings.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code settings
+******************************************************************************/
+
 namespace xecs::settings
 {
     constexpr auto max_component_types_v                = 128;

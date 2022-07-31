@@ -1,4 +1,10 @@
-#pragma once
+/******************************************************************************
+filename: Components.h
+author: Renzo Garcia renzo.garcia@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains code components required for the game
+******************************************************************************/
+
 //---------------------------------------------------------------------------------------
 // COMPONENTS
 //---------------------------------------------------------------------------------------

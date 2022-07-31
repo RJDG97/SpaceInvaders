@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_tools_bits_inline.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code bit tools definitions
+******************************************************************************/
+
 namespace xecs::tools
 {
     //------------------------------------------------------------------------------------

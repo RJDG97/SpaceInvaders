@@ -1,33 +1,18 @@
-// ConsoleApplication1.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-// This is C++ 20 don't forget
-//
+/******************************************************************************
+filename: Example.cpp
+author: Tomas Arce tomas.arcegil@digipen.edu,
+        Renzo Garcia renzo.garcia@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains the 'main' function. 
+Program execution begins and ends there.
+******************************************************************************/
+
 #include "xecs.h"
 #define GLUT_STATIC_LIB
 #include "GL/glut.h"
 #include <random>
 
 #include "Game/Game.h"
-
-//---------------------------------------------------------------------------------------
-// TOOLS
-//--------------------------------------------------\/-----------------------------------
-//                                                  //
-//       +----+----+----+----+----+----+----+----+  //
-//       |  -1,-1  |   0,-1  |   1,-1  |    :    |  //
-//  +---------+---------+---------+---------+----+  //
-//  |  -1,0   |   0,0   |   1,0   |   2,0   |       //
-//  +----+----+----+----+----+----+----+----+----+  //
-//       |  -1,1   |   0,1   |   1,1   |    :    |  //
-//  +----+----+----+----+----+----+----+----+----+  //
-//  |  -1,2   |   0,2   |   1,2   |   2,2   |       //
-//  +----+----+----+----+----+----+----+----+----+  //
-//       |  -1,3   |   0,3   |   1,3   |    :    |  //
-//       +----+----+----+----+----+----+----+----+  //
-//                                                  //
-//--------------------------------------------------/\-----------------------------------
-
-//---------------------------------------------------------------------------------------
 
 void InitializeGame( void ) noexcept
 {
@@ -77,10 +62,7 @@ void InitializeGame( void ) noexcept
     ,       render_projectile      // Structural: No
     >();
 
-    Archetypes::InitArchetypes();
-    Archetypes::GeneratePlayer();
-    Archetypes::GenerateEnemy();
-    Archetypes::GenerateShields();
+    s_Game.m_GameMgr->getOrCreateArchetype< manager>().CreateEntity();
 }
 
 //---------------------------------------------------------------------------------------

@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_archetype_inline.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code archetype definitions
+******************************************************************************/
+
 namespace xecs::archetype
 {
     namespace details

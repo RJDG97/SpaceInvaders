@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_system_inline.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code system definitions
+******************************************************************************/
+
 namespace xecs::system
 {
     namespace details

@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs predefinitions
+******************************************************************************/
+
 #ifndef XECS_H
 #define XECS_H
 #pragma once

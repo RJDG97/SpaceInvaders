@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_system.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code system declerations
+******************************************************************************/
+
 namespace xecs::system
 {
     namespace type

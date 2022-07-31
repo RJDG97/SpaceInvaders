@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_game_mgr.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code game manager declerations
+******************************************************************************/
+
 namespace xecs::game_mgr
 {
     //---------------------------------------------------------------------------

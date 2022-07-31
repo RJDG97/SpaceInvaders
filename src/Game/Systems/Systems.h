@@ -1,4 +1,10 @@
-#pragma once
+/******************************************************************************
+filename: Systems.h
+author: Renzo Garcia renzo.garcia@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains code systems required for the game
+******************************************************************************/
+
 //---------------------------------------------------------------------------------------
 // SYSTEMS
 //---------------------------------------------------------------------------------------
@@ -18,6 +24,7 @@ struct update_input : xecs::system::instance
     __inline
         void operator()(entity& Entity, position& Position, velocity& Velocity, timer& Timer) const noexcept
     {
+        // Set Movement
         if (s_Game.m_Keys['d'])
         {
             Velocity.m_Value.m_X += 1;
@@ -131,7 +138,7 @@ struct update_enemy_logic : xecs::system::instance
             Velocity.m_Value.m_X = -Velocity.m_Value.m_X;
             Position.m_Value.m_Y += s_Game.m_H / 48;
         }
-        if (!Timer.active)
+        if (!Timer.active) // Shoot Projectile
         {
             s_Game.m_pProjectileArchetype->CreateEntity([&](position& Pos, velocity& Vel, grid_cell& GridCell, projectile& Projectile) noexcept
                 {
@@ -143,7 +150,7 @@ struct update_enemy_logic : xecs::system::instance
                 });
             Timer.active = true;
         }
-
+        // Kill Player if Invaders reach the Shields
         if (Position.m_Value.m_Y > s_Game.m_H / 5 * 4 - s_Game.m_H / 48)
             s_Game.lives = -1;
     }
@@ -202,10 +209,20 @@ struct update_manager : xecs::system::instance
 
     void OnGameStart(void) noexcept
     {
+        // Initialize Queries
         m_QueryPlayer.m_Must.AddFromComponents<player>();
         m_QueryEnemy.m_Must.AddFromComponents<enemy>();
         m_QueryProjectile.m_Must.AddFromComponents<projectile>();
         m_QueryShield.m_Must.AddFromComponents<shield>();
+        // Initialize Actors
+        s_Game.m_pProjectileArchetype = &s_Game.m_GameMgr->getOrCreateArchetype<projectile_tuple>();
+        s_Game.m_pEnemyArchetype = &s_Game.m_GameMgr->getOrCreateArchetype< position, velocity, timer, sprite, enemy, grid_cell, animation>();
+        s_Game.m_pPlayerArchetype = &s_Game.m_GameMgr->getOrCreateArchetype< position, velocity, timer, sprite, player, grid_cell>();
+        s_Game.m_pShieldArchetype = &s_Game.m_GameMgr->getOrCreateArchetype< position, sprite, grid_cell, shield>();
+        // Generate Actors
+        Archetypes::GeneratePlayer();
+        Archetypes::GenerateEnemy();
+        Archetypes::GenerateShields();
     }
 
     __inline
@@ -213,18 +230,22 @@ struct update_manager : xecs::system::instance
     {
         if (s_Game.enemies == 0)
         {
+            // Increment lives and leve when enemy wave is defeated
             if (s_Game.lives < 5)
                 s_Game.lives++;
             s_Game.level++;
+            // Generate new wave of Enemies
             Archetypes::GenerateEnemy();
         }
 
         if (s_Game.lives < 0)
         {
+            // Set new Highscore
             if (s_Game.score > s_Game.m_Highscore)
             {
                 s_Game.m_Highscore = s_Game.score;
             }
+            // Reset Values
             s_Game.score = 0;
             s_Game.enemies = 0;
             s_Game.lives = 3;
@@ -234,23 +255,26 @@ struct update_manager : xecs::system::instance
                 {
                     DeleteEntity(Entity);
                 });
+            // Generate Player
             Archetypes::GeneratePlayer();
             // Delete enemies
             Foreach(Search(m_QueryEnemy), [&](entity& Entity) noexcept
                 {
                     DeleteEntity(Entity);
                 });
+            // Generate Enemies
+            Archetypes::GenerateEnemy();
             // Delete Bullets
             Foreach(Search(m_QueryProjectile), [&](entity& Entity) noexcept
                 {
                     DeleteEntity(Entity);
                 });
-
-            Archetypes::GenerateEnemy();
+            // Delete Shields
             Foreach(Search(m_QueryShield), [&](entity& Entity) noexcept
                 {
                     DeleteEntity(Entity);
                 });
+            // Generate Shields
             Archetypes::GenerateShields();
         }
     }
@@ -336,6 +360,7 @@ struct update_projectile_logic : xecs::system::instance
                                     {
                                         if (Sprite.data[x + (Sprite.width * y)])
                                         {
+                                            // Delete Shield pixel - Disintegrate Shield
                                             if (Position.m_Value.m_X > (Pos.m_Value.m_X - (Sprite.width * Sprite.size) / 2) + (x * Sprite.size) - Sprite.size / 2
                                                 && Position.m_Value.m_X < (Pos.m_Value.m_X - (Sprite.width * Sprite.size) / 2) + (x * Sprite.size) + Sprite.size / 2)
                                             {
@@ -370,7 +395,7 @@ struct update_projectile_logic : xecs::system::instance
                                             s_Game.score += Enemy.score;
                                             s_Game.enemies--;
                                             DeleteEntity(Entity);
-                                            
+                                            // Set Enemy to explode
                                             Animator.animate = false;
                                             Enemy.isdead = true;
                                             Timer.active = true;
@@ -507,6 +532,7 @@ struct animate_enemy : xecs::system::instance
         if (!Animation.animate)
             return;
 
+        // Change Sprite according to timer
         if (!Animation.Timer.active)
         {
             if (Animation.issprite1)
@@ -517,9 +543,9 @@ struct animate_enemy : xecs::system::instance
             Animation.issprite1 = !Animation.issprite1;
             Animation.Timer.active = true;
         }
-        else
+        else // Add time to animation timer
             Animation.Timer.m_Value += 0.01f;
-
+        // Stop timer once over value
         if (Animation.Timer.m_Value >= Animation. Timer.m_Timer)
         {
             Animation.Timer.m_Value = 0.0f;
@@ -542,6 +568,7 @@ struct update_ui : xecs::system::instance
     __inline
         void operator()(entity& Entity) const noexcept
     {
+        // Generate UI
         int size = 5;
         glColor3f(1.0, 1.0, 1.0);
         GlutPrint(50, 50, "Score : %d", s_Game.score);
@@ -623,7 +650,7 @@ struct render_player : xecs::system::instance
         constexpr auto Size = 3;
 
         glColor3f(0.3, 1.0, 0.5);
-
+        // Render Player pixels
         for (int y = 0; y < Sprite.height; ++y)
         {
             for (int x = 0; x < Sprite.width; ++x)
@@ -642,7 +669,7 @@ struct render_player : xecs::system::instance
 
             }
         }
-
+        // Render Available Lives pixels
         for (int i = 0; i < s_Game.lives; ++i)
         {
             for (int y = 0; y < Sprite.height; ++y)
@@ -697,7 +724,7 @@ struct render_enemy : xecs::system::instance
         constexpr auto Size = 3;
 
         glColor3f(1.0, 1.0, 1.0);
-
+        // Render Enemies pixels
         for (int y = 0; y < Sprite.height; ++y)
         {
             for (int x = 0; x < Sprite.width; ++x)
@@ -747,7 +774,7 @@ struct render_shield : xecs::system::instance
         void operator()(const position& Position, const sprite& Sprite) const noexcept
     {
         glColor3f(0.3, 1.0, 0.5);
-
+        // Render Shield pixels
         for (int y = 0; y < Sprite.height; ++y)
         {
             for (int x = 0; x < Sprite.width; ++x)
@@ -799,7 +826,7 @@ struct render_projectile : xecs::system::instance
         constexpr auto Size = 3;
 
         glColor3f(1.0, 1.0, 1.0);
-
+        // Render projectile pixels
         for (int y = 0; y < 3; ++y)
         {
             glVertex2i(Position.m_Value.m_X + (Size/2), Position.m_Value.m_Y - (Size/2) + (y * Size));

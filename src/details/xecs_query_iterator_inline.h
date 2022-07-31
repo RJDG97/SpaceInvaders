@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_query_iterator_inline.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code query iterator definitions
+******************************************************************************/
+
 namespace xecs::query
 {
     namespace details

@@ -1,18 +1,14 @@
-#pragma once
+/******************************************************************************
+filename: Archetypes.h
+author: Renzo Garcia renzo.garcia@digipen.edu
+Project: CS396 Final - Space Invaders 
+Description: This file contains code to generate the actors for convenience
+******************************************************************************/
 
 #include "../Sprites.h"
 
 namespace Archetypes
 {
-    void InitArchetypes()
-    {
-        s_Game.m_pProjectileArchetype = &s_Game.m_GameMgr->getOrCreateArchetype<projectile_tuple>();
-        s_Game.m_pEnemyArchetype = &s_Game.m_GameMgr->getOrCreateArchetype< position, velocity, timer, sprite, enemy, grid_cell, animation>();
-        s_Game.m_pPlayerArchetype = &s_Game.m_GameMgr->getOrCreateArchetype< position, velocity, timer, sprite, player, grid_cell>();
-        s_Game.m_pShieldArchetype = &s_Game.m_GameMgr->getOrCreateArchetype< position, sprite, grid_cell, shield>();
-        s_Game.m_GameMgr->getOrCreateArchetype< manager>().CreateEntity();
-    }
-
 	void GeneratePlayer()
 	{
         s_Game.m_pPlayerArchetype->CreateEntity([&](position& Position, velocity& Velocity, timer& Timer, sprite& Sprite, grid_cell& Cell) noexcept

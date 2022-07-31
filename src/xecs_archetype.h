@@ -1,3 +1,10 @@
+/******************************************************************************
+filename: xecs_archetype.h
+author: Tomas Arce tomas.arcegil@digipen.edu
+Project: CS396 Final - Space Invaders
+Description: This file contains xecs code archetype declerations
+******************************************************************************/
+
 namespace xecs::archetype
 {
     using guid = xcore::guid::unit<64, struct archetype_tag>;

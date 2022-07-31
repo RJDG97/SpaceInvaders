@@ -4,10 +4,17 @@
 Go to the [main branch](https://github.com/LIONant-depot/xECS/tree/master) for the introduction.
 
 Space Invaders
-* Inputs
+* Controls
   * w - Shoot
   * a - Move left
   * d - Move right
+* Features
+  * Highscore - Updates whenever a game ends | auto starts new game
+  * Level - Enemies get faster as the level increases
+  * Pixels - Game uses pixel art
+  * Player - Has 3 lives | lose a life when shot | gain a life when enemy wave is defeated
+  * Shields - Disintegrate by pixels
+  * Enemies - Animated | Squid - 40 points | Alien - 20 points | Jellyfish - 10 points
 
 ## To build
 1. Go to the build directory 
